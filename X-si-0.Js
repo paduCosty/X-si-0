@@ -14,18 +14,16 @@ function startGame() {
        tableXO.innerHTML += "<br>";
     }
 }
-let enterClickX = 0, enterClickO = 0, stopGame = false, oneClick = false;
-let winnerToX = [], winnerToO = [], tablePieces = [];
+let winnerToX = [], tablePieces = [];
 for(let i = 0; i < 9; ++i) {
     winnerToX[i] = [];
-    winnerToO[i] = [];
     for(let j = 0; j <= 15; ++j) {
         tablePieces[j] = 0;
         winnerToX[i][j] = 0;
-        winnerToO[i][j] = 0;
     }
 }
-let draw = 0;
+let enterClickX = 0, enterClickO = 0, stopGame = false, draw = 0;
+
 function tableFormat(tableFormatLine, tableFormatColumns) {
     document.getElementById('' + tableFormatLine + tableFormatColumns).style = "Color: blue";
     if(enterClickO == enterClickX && winnerToX[tableFormatLine][tableFormatColumns] == 0) {
