@@ -1,4 +1,5 @@
 let stopper = false;
+
 function startGame() {
     if(stopper == true) {
         return 0;
@@ -14,19 +15,24 @@ function startGame() {
        tableXO.innerHTML += "<br>";
     }
 }
+
 let winnerToX = [], tablePieces = [];
-for(let i = 0; i < 9; ++i) {
-    winnerToX[i] = [];
-    for(let j = 0; j <= 15; ++j) {
-        tablePieces[j] = 0;
-        winnerToX[i][j] = 0;
+
+function reinitializes() {
+    for(let i = 0; i < 9; ++i) {
+        winnerToX[i] = [];
+        for(let j = 0; j <= 15; ++j) {
+            tablePieces[j] = 0;
+            winnerToX[i][j] = 0;
+        }
     }
 }
+
 let enterClickX = 0, enterClickO = 0, stopGame = false, draw = 0;
 
 function tableFormat(tableFormatLine, tableFormatColumns) {
     document.getElementById('' + tableFormatLine + tableFormatColumns).style = "Color: blue";
-    if(enterClickO == enterClickX && winnerToX[tableFormatLine][tableFormatColumns] == 0) {
+    if(stopGame == false && enterClickO == enterClickX && winnerToX[tableFormatLine][tableFormatColumns] == 0) {
         winnerToX[tableFormatLine][tableFormatColumns]++;
         ++draw;
        document.getElementById('' + tableFormatLine + tableFormatColumns).innerText = "X";
@@ -65,7 +71,7 @@ function tableFormat(tableFormatLine, tableFormatColumns) {
                 document.getElementById("winnerText").innerHTML = "The game is draw!";
             }
         }
-        ++enterClickX;
+    ++enterClickX;
     } else if(stopGame == false && winnerToX[tableFormatLine][tableFormatColumns] == 0) {
             winnerToX[tableFormatLine][tableFormatColumns]++;
             ++draw;
