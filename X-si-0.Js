@@ -1,116 +1,113 @@
-let stopper = false;
-
 function startGame() {
-    if(stopper == true) {
-        return 0;
-    }
-    stopper = true;
     let tableXO = document.getElementById("tableXO");
-    for(let tableFormatLines = 0; tableFormatLines < 3; ++tableFormatLines) {
-        for(let tableFormatColumns = 0; tableFormatColumns < 3; ++tableFormatColumns) {
-            tableXO.innerHTML += '<div class = "garage-title" id = '+ tableFormatLines + tableFormatColumns +
-            ' onclick = "tableFormat(' + tableFormatLines +', '+ tableFormatColumns +')">  </div>';
+    for(let lines = 0;lines < 3; ++lines) {
+        for(let columns = 0; columns < 3; ++columns) {
+            tableXO.innerHTML += '<div class = "garage-title" id = '+ lines + columns +
+            ' onclick = "onclickTableFormat(' + lines +', '+ columns +')">  </div>';
             tableXO.innerHTML += " ";
         }
-       tableXO.innerHTML += "<br>";
+        tableXO.innerHTML += "<br>";
     }
 }
 
-let winnerToX = [], tablePieces = [];
+let winnerX = 0, winnerO = 0;
 
-function reinitializes() {
-    for(let i = 0; i < 9; ++i) {
-        winnerToX[i] = [];
-        for(let j = 0; j <= 15; ++j) {
-            tablePieces[j] = 0;
-            winnerToX[i][j] = 0;
+function onclickTableFormat(lines, columns) {
+    if(winnerO == 0 && winnerX == 0) {
+        document.getElementById('' +  lines + columns).innerHTML = 'X';
+        let matrix = xOr0();
+        let indexX = 0, index0 = 1;
+        for(let i = 0; i < 3; ++i) {
+            for(let j = 0; j < 3; ++j) {
+                if(matrix[i][j] == 'X') {
+                    ++indexX;
+                } else if(matrix[i][j] == 'O') {
+                    ++index0;
+                }
+            }
         }
+        if(index0 < indexX) {
+            document.getElementById('' +  lines + columns).innerHTML = 'O';
+        }
+    }
+    winnerX = searchWinnerX();
+    winnerO = searchWinnerO();
+    let draw = drawGame();
+    if(draw == 9 && winnerX == 0 && winnerO == 0) {
+        document.getElementById("winnerText").innerHTML = "Draw Game!";
     }
 }
 
-let enterClickX = 0, enterClickO = 0, stopGame = false, draw = 0;
-
-function tableFormat(tableFormatLine, tableFormatColumns) {
-    document.getElementById('' + tableFormatLine + tableFormatColumns).style = "Color: blue";
-    if(stopGame == false && enterClickO == enterClickX && winnerToX[tableFormatLine][tableFormatColumns] == 0) {
-        winnerToX[tableFormatLine][tableFormatColumns]++;
-        ++draw;
-       document.getElementById('' + tableFormatLine + tableFormatColumns).innerText = "X";
-        for(let i = 0, j = 2; i < 3; ++i, --j) {
-            if(tableFormatLine == i && tableFormatColumns == 0) {
-                tablePieces[0] += winnerToX[tableFormatLine][tableFormatColumns];
-            }
-            if(tableFormatLine == i && tableFormatColumns == 1) {
-                tablePieces[1] += winnerToX[tableFormatLine][tableFormatColumns];
-            }
-            if(tableFormatLine == i && tableFormatColumns == 2) {
-                tablePieces[2] += winnerToX[tableFormatLine][tableFormatColumns];
-            }
-            if(tableFormatLine == i && tableFormatColumns == i) { 
-                tablePieces[3] += winnerToX[tableFormatLine][tableFormatColumns];
-            }
-            if(tableFormatLine == i && tableFormatColumns == j) { 
-                tablePieces[4] += winnerToX[tableFormatLine][tableFormatColumns];
-            }
-            if(tableFormatLine == 0 && tableFormatColumns == i) {
-                tablePieces[5] += winnerToX[tableFormatLine][tableFormatColumns];
-            }
-            if(tableFormatLine == 1 && tableFormatColumns == i) {
-                tablePieces[6] += winnerToX[tableFormatLine][tableFormatColumns];
-            }
-            if(tableFormatLine == 2 && tableFormatColumns == i) {
-                tablePieces[7] += winnerToX[tableFormatLine][tableFormatColumns];
-            }
-        }
-        for(let i = 0; i <= 7; ++i) {
-            if(tablePieces[i] == 3) {
-                document.getElementById("winnerText").innerHTML = "X is the winner!";
-                stopGame = true;
-                return 0;
-            } else if(draw == 9) {
-                document.getElementById("winnerText").innerHTML = "The game is draw!";
-            }
-        }
-    ++enterClickX;
-    } else if(stopGame == false && winnerToX[tableFormatLine][tableFormatColumns] == 0) {
-            winnerToX[tableFormatLine][tableFormatColumns]++;
-            ++draw;
-            document.getElementById('' + tableFormatLine + tableFormatColumns).innerText = 'O';
-        for(let i = 0, j = 2; i < 3; ++i, --j) {
-            if(tableFormatLine == i && tableFormatColumns == 0) {
-                tablePieces[8] += winnerToX[tableFormatLine][tableFormatColumns];
-            }
-            if(tableFormatLine == i && tableFormatColumns == 1) {
-                tablePieces[9] += winnerToX[tableFormatLine][tableFormatColumns];
-            }
-            if(tableFormatLine == i && tableFormatColumns == 2) {
-                tablePieces[10] += winnerToX[tableFormatLine][tableFormatColumns];
-            }
-            if(tableFormatLine == i && tableFormatColumns == i) { 
-                tablePieces[11] += winnerToX[tableFormatLine][tableFormatColumns];
-            }
-            if(tableFormatLine == i && tableFormatColumns == j) { 
-                tablePieces[12] += winnerToX[tableFormatLine][tableFormatColumns];
-            }
-            if(tableFormatLine == 0 && tableFormatColumns == i) {
-                tablePieces[13] += winnerToX[tableFormatLine][tableFormatColumns];
-            }
-            if(tableFormatLine == 1 && tableFormatColumns == i) {
-                tablePieces[14] += winnerToX[tableFormatLine][tableFormatColumns];
-            }
-            if(tableFormatLine == 2 && tableFormatColumns == i) {
-                tablePieces[15] += winnerToX[tableFormatLine][tableFormatColumns];
-            }
-        }
-        for(let i = 8; i < 16; ++i) {
-            if(tablePieces[i] == 3) {
-                document.getElementById("winnerText").innerHTML = "O is the winner!";
-                stopGame = true;
-                return 0;
-            } else if(draw == 9) {
-                ument.getElementById("winnerText").innerHTML = "The game is draw!";
-            }
-        }
-        ++enterClickO;  
+function xOr0() { // initialization matirx with table index
+    let matrix = [];
+    for(let i = 0; i < 3; ++i) {
+        matrix[i] = new Array(3);
     }
+    for(let i = 0; i < 3; ++i) {
+        for(let j = 0; j < 3; ++j) {
+            matrix[i][j] = document.getElementById('' + i + j).innerHTML;
+        }
+    }
+    return matrix;
+}
+
+function searchWinnerX() {
+    let matrix = xOr0();
+    for(let i = 0; i < 3; ++i) {
+        let indexLine = 0, indexColumn = 0, mainDiagonal = 0, indexSecondary = 0;
+        for(let j = 0, secondaryDiagonal = 2; j < 3; ++j, --secondaryDiagonal) {
+            if(matrix[i][j] == 'X') {
+                ++indexLine;
+            }
+            if(matrix[j][i] == 'X') {
+                ++indexColumn;
+            }
+            if(matrix[j][j] == 'X') {
+                ++mainDiagonal;
+            }
+            if(matrix[j][secondaryDiagonal] == 'X') {
+                ++indexSecondary;
+            }
+        }
+        if(indexLine == 3 || indexColumn == 3 || mainDiagonal == 3 || indexSecondary == 3) {
+            return document.getElementById('winnerText').innerHTML = 'X is the winner!';
+        }
+    }
+    return 0;
+}
+function searchWinnerO() {
+    let matrix = xOr0();
+    for(let i = 0; i < 3; ++i) {
+        let indexLine = 0, indexColumn = 0, mainDiagonal = 0, indexSecondary = 0;
+        for(let j = 0, secondaryDiagonal = 2; j < 3; ++j, --secondaryDiagonal) {
+            if(matrix[i][j] == 'O') {
+                ++indexLine;
+            }
+            if(matrix[j][i] == 'O') {
+                ++indexColumn;
+            }
+            if(matrix[j][j] == 'O') {
+                ++mainDiagonal;
+            }
+            if(matrix[j][secondaryDiagonal] == 'O') {
+                ++indexSecondary;
+            }
+        }
+        if(indexLine == 3 || indexColumn == 3 || mainDiagonal == 3 || indexSecondary == 3) {
+            return document.getElementById('winnerText').innerHTML = 'O is the winner!';
+        }
+    }
+    return 0;
+}
+function drawGame() {
+    let matrix = xOr0();
+    index = 0;
+    for(let i = 0; i < 3; ++i) {
+        for(let j = 0; j < 3; ++j) {
+            if(matrix[i][j] != 0) {
+                ++index;
+            }
+        }
+    }
+    return index;
 }
