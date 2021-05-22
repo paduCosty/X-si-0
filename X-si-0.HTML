@@ -2,13 +2,12 @@
 <html>
     <head>
         <link rel = "stylesheet" href="x.0.2.0.css">
-        <script src = "X.0.2.0.js"></script>
+        <script src = "TicTacToe.js"></script>
     </head>
-    <body onload = "reinitializes()">
+    <body onload = "startGame()" >
         <center>
             <div id = "borderGame">
                 <h2 style="color: gray;">Game X & O</h2>
-                <button class = "button button1" onclick = "startGame()">Start Game</button>
                 <div id = tableXO></div>
                 <p id = "winnerText" style="color: green;"></p>
                 <button onClick="window.location.reload();">Restart</button>
